@@ -56,6 +56,15 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/countries/:name", async (req, res) => {
+      const name = req.params.name;
+      const query = { country: name };
+      console.log(req.params.name);
+      const cursor = touristSpotCollection.find(query);
+      const result = await cursor.toArray();
+      res.send(result);
+    });
+
 
 
     // Send a ping to confirm a successful connection
