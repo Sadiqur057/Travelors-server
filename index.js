@@ -32,6 +32,10 @@ async function run() {
       .collection("tourist-spots");
     const countryCollection = client.db("Travelors").collection("countries");
 
+    app.get("/tourist-spots", async (req, res) => {
+      const result = await touristSpotCollection.find().toArray();
+      res.send(result);
+    });
 
 
     // Send a ping to confirm a successful connection
