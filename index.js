@@ -65,6 +65,46 @@ async function run() {
       res.send(result);
     });
 
+    app.post("/tourist-spots", async (req, res) => {
+      const touristData = req.body;
+      console.log(touristData);
+      const result = await touristSpotCollection.insertOne(touristData);
+      res.send(result);
+    });
+
+    app.put("/update/:id", async (req, res) => {
+      const touristData = req.body;
+      const id = touristData._id;
+      const spotName = touristData.spot_name;
+      const visitors = touristData.visitors;
+      const country = touristData.country;
+      const location = touristData.location;
+      const description = touristData.description;
+      const seasonality = touristData.seasonality;
+      const cost = touristData.cost;
+      const travelTime = touristData.travelTime;
+      const image = touristData.image;
+      console.log(spotName)
+      const filter = { _id: new ObjectId(id) };
+      const options = { upsert: false };
+      const updateTouristSpot = {
+        $set: {
+          spot_name: spotName,
+          visitors: visitors,
+          country: country,
+          location: location,
+          description: description,
+          seasonality: seasonality,
+          cost: cost,
+          travelTime: travelTime,
+          image:image
+        },
+      };
+      const result = await touristSpotCollection.updateOne(filter,updateTouristSpot, options)
+      console.log(result)
+      res.send(result)
+    });
+
 
 
     // Send a ping to confirm a successful connection
