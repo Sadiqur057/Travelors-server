@@ -31,10 +31,26 @@ async function run() {
       .db("Travelors")
       .collection("tourist-spots");
     const countryCollection = client.db("Travelors").collection("countries");
+    const userCollection = client.db("Travelors").collection("users");
 
     app.get("/tourist-spots", async (req, res) => {
       const result = await touristSpotCollection.find().toArray();
       res.send(result);
+    });
+
+    app.get("/spot-counts", async (req, res) => {
+      const result = await touristSpotCollection.countDocuments();
+      res.json({ count: result });
+    });
+
+    app.get("/country-counts", async (req, res) => {
+      const result = await countryCollection.countDocuments();
+      res.json({ count: result });
+    });
+
+    app.get("/user-counts", async (req, res) => {
+      const result = await userCollection.countDocuments();
+      res.json({ count: result });
     });
 
     app.get("/tourist-spots/:email", async (req, res) => {
@@ -65,10 +81,29 @@ async function run() {
       res.send(result);
     });
 
+    app.get("/country/:name", async (req, res) => {
+      const name = req.params.name;
+      const query = { name: name };
+      console.log(req.params.name);
+      const result = await countryCollection.findOne(query);
+      res.send(result);
+    });
+
     app.post("/tourist-spots", async (req, res) => {
       const touristData = req.body;
       console.log(touristData);
       const result = await touristSpotCollection.insertOne(touristData);
+      res.send(result);
+    });
+
+    app.post("/users", async (req, res) => {
+      const userData = req.body;
+      const existingUser = await userCollection.findOne({ email: userData.email });
+      if(existingUser){
+        return ;
+      }
+      console.log(userData);
+      const result = await userCollection.insertOne(userData);
       res.send(result);
     });
 
