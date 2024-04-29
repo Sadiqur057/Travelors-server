@@ -75,7 +75,6 @@ async function run() {
     app.get("/countries/:name", async (req, res) => {
       const name = req.params.name;
       const query = { country: name };
-      console.log(req.params.name);
       const cursor = touristSpotCollection.find(query);
       const result = await cursor.toArray();
       res.send(result);
@@ -84,14 +83,12 @@ async function run() {
     app.get("/country/:name", async (req, res) => {
       const name = req.params.name;
       const query = { name: name };
-      console.log(req.params.name);
       const result = await countryCollection.findOne(query);
       res.send(result);
     });
 
     app.post("/tourist-spots", async (req, res) => {
       const touristData = req.body;
-      console.log(touristData);
       const result = await touristSpotCollection.insertOne(touristData);
       res.send(result);
     });
@@ -102,7 +99,6 @@ async function run() {
       if(existingUser){
         return ;
       }
-      console.log(userData);
       const result = await userCollection.insertOne(userData);
       res.send(result);
     });
@@ -119,7 +115,6 @@ async function run() {
       const cost = touristData.cost;
       const travelTime = touristData.travelTime;
       const image = touristData.image;
-      console.log(spotName)
       const filter = { _id: new ObjectId(id) };
       const options = { upsert: false };
       const updateTouristSpot = {
@@ -136,7 +131,6 @@ async function run() {
         },
       };
       const result = await touristSpotCollection.updateOne(filter,updateTouristSpot, options)
-      console.log(result)
       res.send(result)
     });
 
